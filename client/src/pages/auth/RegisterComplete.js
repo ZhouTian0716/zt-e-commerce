@@ -10,7 +10,7 @@ function RegisterComplete( {history} ) {
 
     useEffect(()=>{
         setEmail(window.localStorage.getItem('emailForRegistration'))
-        console.log(window.location.href)
+  
     },[])
 
 
@@ -40,7 +40,8 @@ function RegisterComplete( {history} ) {
                 // redirect
                 console.log(user);
                 console.log(idTokenResult);
-                // history.push('/')
+                toast.success('Password Set, Register Complete!');
+                history.push('/')
             }
         } catch (error) {
             console.log(error);
