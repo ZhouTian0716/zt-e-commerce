@@ -20,6 +20,7 @@ export default function App() {
   // to check firebase auth state
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged( async (user) => {
+      console.log(user);
       if(user){
         const idTokenResult = await user.getIdTokenResult();
         dispatch({
