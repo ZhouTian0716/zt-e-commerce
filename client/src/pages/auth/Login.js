@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth, googleAuthProvider } from '../../firebase';
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
 import { MailOutlined, GoogleOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 
 
 
 
-function Login( {history} ) {
+function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
+    const history = useHistory();
+
+
+    const { user } = useSelector( (state) => ({ ...state }));
+    useEffect(() => {
+        if( user && user.token ) {
+            history.push('/');
+        }
+    },[user])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -108,6 +118,7 @@ function Login( {history} ) {
                         icon={<GoogleOutlined/>}
                     >Login with Gmail
                     </Button>
+                    <Link to="/forgot/password" className="mt-3 text-danger float-right">Forgot Password</Link>
                 </div>
             </div>
             
