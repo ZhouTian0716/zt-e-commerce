@@ -1,0 +1,26 @@
+{
+  "name": "zt-e-commerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "build": "cd client && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZhouTian0716/zt-e-commerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZhouTian0716/zt-e-commerce/issues"
+  },
+  "homepage": "https://github.com/ZhouTian0716/zt-e-commerce#readme",
+  "devDependencies": {
+    "concurrently": "^6.2.1"
+  }
+}

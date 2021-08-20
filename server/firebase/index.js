@@ -4,7 +4,7 @@ var serviceAccount = require("../config/fbServiceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-//   databaseURL:"https://zt-e-commerce.firebaseio.com/",
+  databaseURL:"https://zt-e-commerce.firebaseio.com/",
 });
 
 module.exports = admin;
