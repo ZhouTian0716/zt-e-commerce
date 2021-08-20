@@ -11,6 +11,8 @@ import { createOrUpdateUser } from '../../clientRequest/auth.js';
 
 
 
+
+
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -26,6 +28,15 @@ function Login() {
             history.push('/');
         }
     },[user])
+
+
+    const roleBasedRedirect = (res) => {
+        if(res.data.role == "admin") {
+            history.push("/admin/dashboard");
+        } else {
+            history.push("/user/history");
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,11 +58,12 @@ function Login() {
                             role:res.data.role,
                             _id:res.data._id
                         }
-                    })  
+                    });
+                    roleBasedRedirect(res);
                 })
                 .catch((error) => console.log(error));
             toast.success('Logged in successfully');
-            history.push('/');
+            // history.push('/');
             
         } catch(error){
             console.log(error);
@@ -78,11 +90,12 @@ function Login() {
                             role:res.data.role,
                             _id:res.data._id
                         }
-                    })  
+                    }); 
+                    roleBasedRedirect(res); 
                 })
                 .catch((error) => console.log(error));
             toast.success('Logged in successfully');
-            history.push('/');
+            // history.push('/');
         } catch(error){
             console.log(error);
             toast.error(error.message);   
