@@ -14,6 +14,7 @@ export default function Password() {
       await auth.currentUser.updatePassword(password);
       setLoading(false);
       toast.success("Password Updated");
+      setPassword('');
     } catch (error) {
       setLoading(false);
       setPassword('');

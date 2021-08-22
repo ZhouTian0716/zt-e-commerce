@@ -27,11 +27,11 @@ function Login() {
         if( user && user.token ) {
             history.push('/');
         }
-    },[user])
+    },[user, history])
 
 
     const roleBasedRedirect = (res) => {
-        if(res.data.role == "admin") {
+        if(res.data.role === "admin") {
             history.push("/admin/dashboard");
         } else {
             history.push("/user/history");

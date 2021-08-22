@@ -11,9 +11,9 @@ export default function LoadingToRedirect() {
         }, 1000)
         count === 0 && history.push('/');
         return () => clearInterval(interval);
-    },[count]);
+    },[count, history]);
 
     return (
-        <div className="container p-5 text-center">Redirecting back to home in {count} seconds.</div>
+        <div className="container p-5 text-center">Checking user role, redirecting to home in {count} seconds if not the right user.</div>
     )
 }

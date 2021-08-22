@@ -10,10 +10,13 @@ import Header from "./components/nav/Header";
 import RegisterComplete from "./pages/auth/RegisterComplete";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import History from "./pages/user/History.js";
-// User route protected
+// User routes protected
 import UserRoute from "./components/routes/UserRoute.js";
 import Password from "./pages/user/Password.js";
 import Wishlist from "./pages/user/Wishlist.js";
+// Admin routes protected
+import AdminRoute from "./components/routes/AdminRoute.js";
+import AdminDashboard from "./pages/admin/AdminDashboard.js";
 
 
 
@@ -49,7 +52,7 @@ export default function App() {
     });
     // clean up
     return () => unsubscribe();
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -64,6 +67,7 @@ export default function App() {
         <UserRoute exact path="/user/history" component={History} />
         <UserRoute exact path="/user/password" component={Password} />
         <UserRoute exact path="/user/wishlist" component={Wishlist} />
+        <AdminRoute exact path="/admin/dashboard" component={AdminDashboard} />
       </Switch>
     </>
   );
