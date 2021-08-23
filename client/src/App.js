@@ -17,8 +17,8 @@ import Wishlist from "./pages/user/Wishlist.js";
 // Admin routes protected
 import AdminRoute from "./components/routes/AdminRoute.js";
 import AdminDashboard from "./pages/admin/AdminDashboard.js";
-
-
+import CategoryCreate from "./pages/admin/category/CategoryCreate.js";
+import CategoryUpdate from "./pages/admin/category/CategoryUpdate.js";
 
 import { auth } from "./firebase";
 import { useDispatch } from "react-redux";
@@ -68,6 +68,12 @@ export default function App() {
         <UserRoute exact path="/user/password" component={Password} />
         <UserRoute exact path="/user/wishlist" component={Wishlist} />
         <AdminRoute exact path="/admin/dashboard" component={AdminDashboard} />
+        <AdminRoute exact path="/admin/category" component={CategoryCreate} />
+        <AdminRoute
+          exact
+          path="/admin/category/:slug"
+          component={CategoryUpdate}
+        />
       </Switch>
     </>
   );

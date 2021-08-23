@@ -1,11 +1,13 @@
-const slugify = require('slugify');
+// const slugify = require('slugify');
+const translation = require('transliteration');
+const trSlugify = translation.slugify;
 const Category = require('../models/category');
 
 exports.create = async (req, res) => {
     try {
         // console.log(req.body);
         const { name } =req.body;
-        const category = await new Category({ name, slug:slugify(name) }).save();
+        const category = await new Category({ name, slug:trSlugify(name) }).save();
         res.json(category);
     } catch(err){
         // console.log(err);
@@ -32,11 +34,10 @@ exports.read = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        // console.log(req.body);
         const { name } =req.body;
         const categoryData = await Category.findOneAndUpdate(
             { slug: req.params.slug },
-            { name, slug:slugify(name) },
+            { name, slug:trSlugify(name) },
             { new: true }
         );
         res.json(categoryData);
