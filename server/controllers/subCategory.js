@@ -1,23 +1,21 @@
 // const slugify = require('slugify');
 const translation = require('transliteration');
 const trSlugify = translation.slugify;
-const Category = require('../models/category');
+const SubCategory = require('../models/subCategory');
 
 exports.create = async (req, res) => {
     try {
-        // console.log(req.body);
-        const { name } =req.body;
-        const data = await new Category({ name, slug:trSlugify(name) }).save();
+        const { name, parent } =req.body;
+        const data = await new SubCategory({ name, parent, slug:trSlugify(name) }).save();
         res.json(data);
     } catch(err){
-        // console.log(err);
         res.status(400).send(err)
     }
 };
 
 exports.list = async (req, res) => {
     try {
-        res.json( await Category.find({}).sort({ createdAt: -1 }).exec() );
+        res.json( await SubCategory.find({}).sort({ createdAt: -1 }).exec() );
     } catch(err){
         res.status(400).send(err)
     }
@@ -25,7 +23,7 @@ exports.list = async (req, res) => {
 
 exports.read = async (req, res) => {
     try {
-        const data = await Category.findOne({ slug: req.params.slug });
+        const data = await SubCategory.findOne({ slug: req.params.slug });
         res.json(data);
     } catch(err){
         res.status(400).send(err)
@@ -34,10 +32,10 @@ exports.read = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const { name } =req.body;
-        const data = await Category.findOneAndUpdate(
+        const { name, parent } =req.body;
+        const data = await SubCategory.findOneAndUpdate(
             { slug: req.params.slug },
-            { name, slug:trSlugify(name) },
+            { name, parent, slug:trSlugify(name) },
             { new: true }
         );
         res.json(data);
@@ -48,7 +46,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
-        const data = await Category.findOneAndDelete({ slug: req.params.slug });
+        const data = await SubCategory.findOneAndDelete({ slug: req.params.slug });
         res.json(data);
         
     } catch(err){

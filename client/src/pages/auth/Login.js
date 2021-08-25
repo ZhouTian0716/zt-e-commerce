@@ -14,8 +14,8 @@ import { createOrUpdateUser } from '../../clientRequest/auth.js';
 
 
 function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('egglord0716@gmail.com');
+    const [password, setPassword] = useState('123456');
     const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
