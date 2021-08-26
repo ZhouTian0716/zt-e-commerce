@@ -21,6 +21,7 @@ import CategoryCreate from "./pages/admin/category/CategoryCreate.js";
 import CategoryUpdate from "./pages/admin/category/CategoryUpdate.js";
 import SubCategoryCreate from "./pages/admin/subCategory/SubCategoryCreate.js";
 import SubCategoryUpdate from "./pages/admin/subCategory/SubCategoryUpdate.js";
+import ProductCreate from "./pages/admin/product/ProductCreate.js";
 
 import { auth } from "./firebase";
 import { useDispatch } from "react-redux";
@@ -74,6 +75,7 @@ export default function App() {
         <AdminRoute exact path="/admin/category/:slug" component={CategoryUpdate} />
         <AdminRoute exact path="/admin/sub-category" component={SubCategoryCreate} />
         <AdminRoute exact path="/admin/sub-category/:slug" component={SubCategoryUpdate} />
+        <AdminRoute exact path="/admin/product" component={ProductCreate} />
       </Switch>
     </>
   );
