@@ -7,10 +7,11 @@ const { authCheck, adminCheck } = require("../middlewares/auth.js");
 // import from controllers
 const {
   create,
+  readAll,
 } = require("../controllers/product.js");
 
 // routes
 router.post("/product", authCheck, adminCheck, create);
-
+router.get("/products", readAll);
 
 module.exports = router;

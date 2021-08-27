@@ -4,7 +4,7 @@ const Product = require('../models/product.js');
 
 exports.create = async (req, res) => {
     try {
-        // console.log(req.body);
+        console.log(req.body);
         req.body.slug = trSlugify(req.body.title);
         const newProduct = await new Product( req.body ).save();
         res.json(newProduct);
@@ -17,3 +17,10 @@ exports.create = async (req, res) => {
     }
 };
 
+exports.readAll = async (req, res) => {
+    try {
+        res.json( await Product.find({}).sort({ createdAt: -1 }).exec() );
+    } catch(err){
+        res.status(400).send(err)
+    }
+};
