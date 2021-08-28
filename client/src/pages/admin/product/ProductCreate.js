@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import ProductCreateForm from "../../../components/forms/ProductCreateForm";
+import FileUpload from "../../../components/forms/FileUpload";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { create } from "../../../clientRequest/product";
@@ -8,6 +9,7 @@ import {
   getCategories,
   getSubCategories,
 } from "../../../clientRequest/category";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const initialState = {
   title: "",
@@ -86,8 +88,20 @@ export default function ProductCreate() {
           <AdminNav />
         </div>
         <div className="col-md-10">
-          <h4>Product Create</h4>
+          {loading ? (
+            <LoadingOutlined className="text-danger h1" />
+          ) : (
+            <h4>Product Create</h4>
+          )}
           <hr />
+
+          <div className="p-3">
+            <FileUpload
+              productState={productState}
+              setProductState={setProductState}
+              setLoading={setLoading}
+            />
+          </div>
 
           <ProductCreateForm
             handleChange={handleChange}
