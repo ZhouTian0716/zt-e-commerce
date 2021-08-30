@@ -32,6 +32,18 @@ exports.listAll = async (req, res) => {
   }
 };
 
+exports.read = async (req, res) => {
+  try {
+    const data = await Product.findOne({ slug: req.params.slug })
+      .populate("category")
+      .populate("sub_categories")
+      .exec();
+    res.json(data);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
+
 exports.remove = async (req, res) => {
   try {
     const deleted = await Product.findOneAndRemove({

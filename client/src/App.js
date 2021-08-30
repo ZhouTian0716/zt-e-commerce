@@ -22,6 +22,7 @@ import CategoryUpdate from "./pages/admin/category/CategoryUpdate.js";
 import SubCategoryCreate from "./pages/admin/subCategory/SubCategoryCreate.js";
 import SubCategoryUpdate from "./pages/admin/subCategory/SubCategoryUpdate.js";
 import ProductCreate from "./pages/admin/product/ProductCreate.js";
+import ProductUpdate from "./pages/admin/product/ProductUpdate.js";
 import AllProducts from "./pages/admin/product/AllProducts.js";
 
 import { auth } from "./firebase";
@@ -73,10 +74,27 @@ export default function App() {
         <UserRoute exact path="/user/wishlist" component={Wishlist} />
         <AdminRoute exact path="/admin/dashboard" component={AdminDashboard} />
         <AdminRoute exact path="/admin/category" component={CategoryCreate} />
-        <AdminRoute exact path="/admin/category/:slug" component={CategoryUpdate} />
-        <AdminRoute exact path="/admin/sub-category" component={SubCategoryCreate} />
-        <AdminRoute exact path="/admin/sub-category/:slug" component={SubCategoryUpdate} />
+        <AdminRoute
+          exact
+          path="/admin/category/:slug"
+          component={CategoryUpdate}
+        />
+        <AdminRoute
+          exact
+          path="/admin/sub-category"
+          component={SubCategoryCreate}
+        />
+        <AdminRoute
+          exact
+          path="/admin/sub-category/:slug"
+          component={SubCategoryUpdate}
+        />
         <AdminRoute exact path="/admin/product" component={ProductCreate} />
+        <AdminRoute
+          exact
+          path="/admin/product/:slug"
+          component={ProductUpdate}
+        />
         <AdminRoute exact path="/admin/products" component={AllProducts} />
       </Switch>
     </>
