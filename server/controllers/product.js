@@ -54,3 +54,21 @@ exports.remove = async (req, res) => {
     res.status(400).send(err);
   }
 };
+
+exports.update = async (req, res) => {
+  try {
+    if (req.body.title) {
+      req.body.slug = trSlugify(req.body.title);
+    }
+    const updated = await Product.findOneAndUpdate(
+      { slug: req.params.slug },
+      req.body,
+      { new: true }
+    ).exec();
+    res.json(updated);
+  } catch (err) {
+    console.log("PRODUCT UPDATE ERROR ----> ", err);
+    // res.status(400).send("PRODUCT UPDATE ERROR");
+    res.status(400).json({ err: err.message });
+  }
+};

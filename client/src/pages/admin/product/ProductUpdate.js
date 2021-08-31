@@ -8,7 +8,7 @@ import FileUpload from "../../../components/forms/FileUpload";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { create } from "../../../clientRequest/product";
-import { getProduct } from "../../../clientRequest/product";
+import { getProduct, updateProduct } from "../../../clientRequest/product";
 import {
   getCategories,
   getSubCategories,
@@ -30,7 +30,7 @@ const initialState = {
   brand: "",
 };
 
-export default function ProductUpdate({ match }) {
+export default function ProductUpdate({ history, match }) {
   // Redux store state
   const { user } = useSelector((state) => ({ ...state }));
   const [loading, setLoading] = useState(false);
@@ -45,14 +45,10 @@ export default function ProductUpdate({ match }) {
 
   const loadProduct = () => {
     getProduct(slug).then((p) => {
-      // console.log("single product", p);
-      // 1 load single proudct
       setProductState({ ...productState, ...p.data });
-      // 2 load single product category subs
       getSubCategories(p.data.category._id).then((res) => {
         setSubOptions(res.data); // on first load, show default subs
       });
-      // 3 prepare array of sub ids to show as default sub values in antd Select
       let arr = [];
       p.data.sub_categories.map((s) => {
         arr.push(s._id);
@@ -68,36 +64,35 @@ export default function ProductUpdate({ match }) {
   useEffect(() => {
     loadProduct();
     loadCategories();
-    // console.log(productState.categories)
   }, []);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     const res = await updateCategory(match.params.slug, { name }, user.token);
-  //     // console.log(res);
-  //     setLoading(false);
-  //     setName("");
-  //     toast.success(`Changed to "${res.data.name}"`);
-  //     history.push("/admin/category");
-  //   } catch (err) {
-  //     setLoading(false);
-  //     console.log(err);
-  //     if (err.response.status === 400) toast.error(err.response.data);
-  //   }
-  // };
-
-  const handleSubmit = async (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    productState.sub_categories = arrayOfSubs;
+    productState.category = selectedCategory
+      ? selectedCategory
+      : productState.category;
+    updateProduct(slug, productState, user.token)
+      .then((res) => {
+        setLoading(false);
+        toast.success(`"${res.data.title}" is updated`);
+        history.push('/admin/products')
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.err);
+      });
+  };
 
   const handleChange = async (e) => {
     setProductState({ ...productState, [e.target.name]: e.target.value });
   };
 
-  const handleCatagoryChange = (e) => {
+  const handleCategoryChange = (e) => {
     e.preventDefault();
     console.log("CLICKED CATEGORY", e.target.value);
-    setProductState({ ...productState, subs: [] });
+    setProductState({ ...productState, sub_categories: [] });
 
     setSelectedCategory(e.target.value);
 
@@ -106,8 +101,10 @@ export default function ProductUpdate({ match }) {
       setSubOptions(res.data);
     });
 
-    console.log("EXISTING CATEGORY productState.category", productState.category);
-
+    console.log(
+      "EXISTING CATEGORY productState.category",
+      productState.category
+    );
     // if user clicks back to the original category
     // show its sub categories in default
     if (productState.category._id === e.target.value) {
@@ -124,15 +121,27 @@ export default function ProductUpdate({ match }) {
           <AdminNav />
         </div>
         <div className="col-md-10">
-          <h4>Product Update</h4>
+          {loading ? (
+            <LoadingOutlined className="text-danger h1" />
+          ) : (
+            <h4>Product update</h4>
+          )}
           {/* {JSON.stringify(productState)} */}
 
           <hr />
 
+          <div className="p-3">
+            <FileUpload
+              productState={productState}
+              setProductState={setProductState}
+              setLoading={setLoading}
+            />
+          </div>
+
           <ProductUpdateForm
-            handleChange={handleChange}
             handleSubmit={handleSubmit}
-            handleCatagoryChange={handleCatagoryChange}
+            handleChange={handleChange}
+            handleCategoryChange={handleCategoryChange}
             productState={productState}
             setProductState={setProductState}
             categories={categories}
@@ -141,6 +150,7 @@ export default function ProductUpdate({ match }) {
             setArrayOfSubs={setArrayOfSubs}
             selectedCategory={selectedCategory}
           />
+          <hr />
         </div>
       </div>
     </div>

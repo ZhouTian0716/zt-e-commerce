@@ -7,7 +7,7 @@ export default function ProductUpdateForm({
   handleChange,
   setProductState,
   productState,
-  handleCatagoryChange,
+  handleCategoryChange,
   categories,
   subOptions,
   arrayOfSubs,
@@ -127,9 +127,9 @@ export default function ProductUpdateForm({
         <select
           name="category"
           className="form-control"
-          onChange={handleCatagoryChange}
+          onChange={handleCategoryChange}
+          value={selectedCategory ? selectedCategory : category._id}
         >
-          <option>{category ? category.name : "Please select"}</option>
           {/* {console.log(categories)} */}
           {categories.length > 0 &&
             categories.map((c) => (
