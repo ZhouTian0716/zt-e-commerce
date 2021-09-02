@@ -72,3 +72,19 @@ exports.update = async (req, res) => {
     res.status(400).json({ err: err.message });
   }
 };
+
+exports.list = async (req, res) => {
+  try {
+    const { sort, order, limit } = req.body;
+    const products = await Product.find({})
+      .populate("category")
+      .populate("sub_categories")
+      .sort([[sort, order]])
+      .limit(limit)
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send(err);
+  }
+};

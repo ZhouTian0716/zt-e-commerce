@@ -1,12 +1,12 @@
 import React from "react";
 import { Card } from "antd";
 import laptop from "../../images/laptop.png";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 
-const ProductCard = ({ product, handleRemove }) => {
+const ProductCard = ({ product }) => {
   // destructure
   const { title, description, images, slug } = product;
 
@@ -20,13 +20,12 @@ const ProductCard = ({ product, handleRemove }) => {
         />
       }
       actions={[
-        <Link to={`/admin/product/${slug}`}>
-          <EditOutlined className="text-warning" />
+        <Link to={`/product/${slug}`}>
+          <EyeOutlined className="text-warning" /> <br /> View Product
         </Link>,
-        <DeleteOutlined
-          className="text-danger"
-          onClick={() => handleRemove(slug)}
-        />,
+        <>
+          <ShoppingCartOutlined className="text-danger" /> <br /> Add to cart
+        </>,
       ]}
     >
       <Meta

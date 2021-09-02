@@ -10,7 +10,8 @@ const {
   listAll,
   remove,
   read,
-  update
+  update,
+  list,
 } = require("../controllers/product.js");
 
 // routes
@@ -19,6 +20,8 @@ router.get("/products/:count", listAll);
 router.get("/product/:slug", read);
 router.delete("/product/:slug", authCheck, adminCheck, remove);
 router.put("/product/:slug", authCheck, adminCheck, update);
+
+router.post("/products", list);
 
 
 module.exports = router;

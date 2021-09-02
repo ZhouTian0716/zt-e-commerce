@@ -25,9 +25,21 @@ export const removeProduct = async (slug, authtoken) => {
 };
 
 export const updateProduct = async (slug, product, authtoken) => {
-  return await axios.put(`${process.env.REACT_APP_API}/product/${slug}`, product, {
-    headers: {
-      authtoken,
-    },
+  return await axios.put(
+    `${process.env.REACT_APP_API}/product/${slug}`,
+    product,
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+};
+
+export const getProducts = async (sort, order, limit) => {
+  return await axios.post(`${process.env.REACT_APP_API}/products`, {
+    sort,
+    order,
+    limit,
   });
 };
