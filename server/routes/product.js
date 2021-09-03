@@ -13,6 +13,7 @@ const {
   update,
   list,
   productsCount,
+  productStar,
 } = require("../controllers/product.js");
 
 // routes
@@ -25,7 +26,8 @@ router.put("/product/:slug", authCheck, adminCheck, update);
 
 
 router.post("/products", list);
-
+// rating relevant
+router.put('/product/star/:productId', authCheck, productStar);
 
 
 module.exports = router;
