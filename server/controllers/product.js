@@ -117,7 +117,6 @@ exports.productsCount = async (req, res) => {
   res.json(total);
 };
 
-
 exports.productStar = async (req, res) => {
   try {
     const product = await Product.findById(req.params.productId).exec();
@@ -155,4 +154,20 @@ exports.productStar = async (req, res) => {
   } catch (err) {
     res.status(400).send(err);
   }
+};
+
+//listRelated
+exports.listRelated = async (req, res) => {
+  const product = await Product.findById(req.params.productId).exec();
+  const related = await Product.find({
+    _id: { $ne: product._id },
+    category: product.category,
+  })
+    .limit(3)
+    .populate("category")
+    .populate("postedBy")
+    .populate("sub_categories")
+    .exec();
+  res.json(related);
+  // console.log(related.length);
 };

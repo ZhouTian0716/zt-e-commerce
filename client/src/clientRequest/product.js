@@ -12,7 +12,6 @@ export const getProductsByCount = async (count) => {
   return await axios.get(`${process.env.REACT_APP_API}/products/${count}`);
 };
 
-
 export const getProduct = async (slug) => {
   return await axios.get(`${process.env.REACT_APP_API}/product/${slug}`);
 };
@@ -48,4 +47,22 @@ export const getProducts = async (sort, order, page) => {
 // Pagination
 export const getProductsCount = async () => {
   return await axios.get(`${process.env.REACT_APP_API}/products/total`);
+};
+
+// Rating
+export const productStar = async (productId, star, authtoken) =>
+  await axios.put(
+    `${process.env.REACT_APP_API}/product/star/${productId}`,
+    { star },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+
+
+// Related Products  
+export const getRelatedProduct = async (productId) => {
+  return await axios.get(`${process.env.REACT_APP_API}/product/related/${productId}`);
 };

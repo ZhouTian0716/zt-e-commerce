@@ -41,7 +41,7 @@ export default function ProductListItems({ product }) {
           {sub_categories.map((s) => (
             <Link
               key={s._id}
-              to={`/sub/${s.slug}`}
+              to={`/sub-category/${s.slug}`}
               className="label label-default label-pill pull-xs-right"
             >
               {s.name}

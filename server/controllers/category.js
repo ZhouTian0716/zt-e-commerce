@@ -3,6 +3,7 @@ const translation = require("transliteration");
 const trSlugify = translation.slugify;
 const Category = require("../models/category");
 const SubCategory = require("../models/subCategory");
+const Product = require("../models/product");
 
 exports.create = async (req, res) => {
   try {
@@ -26,8 +27,15 @@ exports.list = async (req, res) => {
 
 exports.read = async (req, res) => {
   try {
-    const data = await Category.findOne({ slug: req.params.slug });
-    res.json(data);
+    const category = await Category.findOne({ slug: req.params.slug });
+    const products = await Product.find({category})
+    .populate('category')
+    .populate('postedBy', '_id name')
+    .exec();
+    res.json({
+      category,
+      products,
+    });
   } catch (err) {
     res.status(400).send(err);
   }
