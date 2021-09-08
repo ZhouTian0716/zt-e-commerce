@@ -61,8 +61,14 @@ export const productStar = async (productId, star, authtoken) =>
     }
   );
 
-
-// Related Products  
+// Related Products
 export const getRelatedProduct = async (productId) => {
-  return await axios.get(`${process.env.REACT_APP_API}/product/related/${productId}`);
+  return await axios.get(
+    `${process.env.REACT_APP_API}/product/related/${productId}`
+  );
+};
+
+// Related Products
+export const fetchProductsByFilter = async (query) => {
+  return await axios.post(`${process.env.REACT_APP_API}/search/filters`, query);
 };

@@ -11,9 +11,11 @@ export const showAverage = (p) => {
     let sum = total.reduce((previous, next) => previous + next, 0);
     let average = sum / length;
 
+
     return (
       <div className="text-center pt-1 pb-3">
         <span>
+        {average}{" "}
           <StarRating
             starDimension="20px"
             starSpacing="2px"
