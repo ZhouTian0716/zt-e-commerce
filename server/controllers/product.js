@@ -174,27 +174,39 @@ exports.listRelated = async (req, res) => {
 
 // Searching product
 exports.searchFilters = async (req, res) => {
-  const { query, price, category, stars, sub_category} = req.body;
+  const { query, price, category, stars, sub_category, shipping, brand, color} = req.body;
   if (query) {
-    // console.log("query --->", query);
+    console.log("query --->", query);
     await handleQuery(req, res, query);
   }
   // make sure to send price as [20, 200] from front end
   if (price !== undefined) {
-    // console.log("price --->", price);
+    console.log("price --->", price);
     await handlePrice(req, res, price);
   }
   if (category) {
-    // console.log("category --->", category);
+    console.log("category --->", category);
     await handleCategory(req, res, category);
   }
   if (stars) {
-    // console.log("stars --->", stars);
+    console.log("stars --->", stars);
     await handleStar(req, res, stars);
   }
   if (sub_category) {
     console.log("sub_category --->", sub_category);
     await handleSub(req, res, sub_category);
+  }
+  if (shipping) {
+    console.log("shipping --->", shipping);
+    await handleShipping(req, res, shipping);
+  }
+  if (color) {
+    console.log("color --->", color);
+    await handleColor(req, res, color);
+  }
+  if (brand) {
+    console.log("brand --->", brand);
+    await handleBrand(req, res, brand);
   }
 };
 
@@ -271,6 +283,48 @@ const handleStar = (req, res, stars) => {
 const handleSub = async (req, res, sub_category) => {
   try {
     let products = await Product.find({ sub_categories: sub_category })
+      .populate("category", "_id name")
+      .populate("sub_categories", "_id name")
+      .populate("postedBy", "_id name")
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send(err);
+  }
+};
+
+const handleShipping = async (req, res, shipping) => {
+  try {
+    let products = await Product.find({ shipping })
+      .populate("category", "_id name")
+      .populate("sub_categories", "_id name")
+      .populate("postedBy", "_id name")
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send(err);
+  }
+};
+
+const handleColor = async (req, res, color) => {
+  try {
+    let products = await Product.find({ color })
+      .populate("category", "_id name")
+      .populate("sub_categories", "_id name")
+      .populate("postedBy", "_id name")
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send(err);
+  }
+};
+
+const handleBrand = async (req, res, brand) => {
+  try {
+    let products = await Product.find({ brand })
       .populate("category", "_id name")
       .populate("sub_categories", "_id name")
       .populate("postedBy", "_id name")

@@ -7,7 +7,7 @@ import { getCategories } from "../clientRequest/category";
 import { getAll } from "../clientRequest/subCategory";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
-import { Menu, Slider, Checkbox } from "antd";
+import { Menu, Slider, Checkbox, Radio } from "antd";
 import {
   DollarOutlined,
   DownSquareOutlined,
@@ -17,15 +17,32 @@ import Star from "../components/forms/Star";
 const { SubMenu, ItemGroup } = Menu;
 
 export default function Shop() {
+  const [ok, setOk] = useState(false);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState([0, 0]);
-  const [ok, setOk] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryIds, setCategoryIds] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [sub, setSub] = useState("");
   const [star, setStar] = useState("");
+  const [brands, setBrands] = useState([
+    "Apple",
+    "Samsung",
+    "Microsoft",
+    "Lenovo",
+    "ASUS",
+  ]);
+  const [brand, setBrand] = useState("");
+  const [colors, setColors] = useState([
+    "Black",
+    "Brown",
+    "Silver",
+    "White",
+    "Blue",
+  ]);
+  const [color, setColor] = useState("");
+  const [shipping, setShipping] = useState("");
 
   const dispatch = useDispatch();
   const { search } = useSelector((state) => ({ ...state }));
@@ -78,7 +95,10 @@ export default function Shop() {
 
     setCategoryIds([]);
     setStar("");
-    setSub('');
+    setBrand("");
+    setColor("");
+    setShipping("");
+    setSub("");
     setPrice(value);
     setTimeout(() => {
       setOk(!ok);
@@ -109,8 +129,11 @@ export default function Shop() {
       payload: { text: "" },
     });
     setPrice([0, 0]);
+    setBrand("");
+    setColor("");
+    setShipping("");
     setStar("");
-    setSub('');
+    setSub("");
     // Dealing with the checked options
     let storedOptions = [...categoryIds];
     let targetIndex = storedOptions.indexOf(e.target.value);
@@ -132,7 +155,10 @@ export default function Shop() {
     });
     setPrice([0, 0]);
     setCategoryIds([]);
-    setSub('');
+    setSub("");
+    setColor("");
+    setBrand("");
+    setShipping("");
     setStar(num);
     fetchProducts({ stars: num });
     //
@@ -170,10 +196,108 @@ export default function Shop() {
     setPrice([0, 0]);
     setCategoryIds([]);
     setStar("");
-
+    setColor("");
+    setShipping("");
+    setBrand("");
     setSub(sub);
-    fetchProducts({ sub_category:sub });
-    //
+    fetchProducts({ sub_category: sub });
+  };
+
+  // 7. Brand
+  const showBrands = () =>
+    brands.map((b) => (
+      <Radio
+        className="pb-1 pl-1 pr-4"
+        value={b}
+        name={b}
+        checked={b === brand}
+        onChange={handleBrand}
+      >
+        {b}
+      </Radio>
+    ));
+
+  const handleBrand = (e) => {
+    setSub("");
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar("");
+    setColor("");
+    setShipping("");
+    setBrand(e.target.value);
+    fetchProducts({ brand: e.target.value });
+  };
+
+  //8. colors
+  const showColors = () =>
+    colors.map((c) => (
+      <Radio
+        className="pb-1 pl-1 pr-4"
+        value={c}
+        name={c}
+        checked={c === color}
+        onChange={handleColor}
+      >
+        {c}
+      </Radio>
+    ));
+
+  const handleColor = (e) => {
+    setSub("");
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar("");
+    setBrand("");
+    setShipping('');
+    setColor(e.target.value);
+    setShipping("");
+    fetchProducts({ color: e.target.value });
+  };
+
+  //9. shipping
+  const showShipping = () => (
+    <>
+      <Checkbox
+        className="pb-2 pl-4 pr-4"
+        onChange={handleShippingchange}
+        value="Yes"
+        checked={shipping === "Yes"}
+      >
+        Yes
+      </Checkbox>
+
+      <Checkbox
+        className="pb-2 pl-4 pr-4"
+        onChange={handleShippingchange}
+        value="No"
+        checked={shipping === "No"}
+      >
+        No
+      </Checkbox>
+    </>
+  );
+
+  const handleShippingchange = (e) => {
+    setSub("");
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar("");
+    setBrand("");
+    setColor("");
+    setShipping(e.target.value);
+    fetchProducts({ shipping: e.target.value });
   };
 
   return (
@@ -182,7 +306,10 @@ export default function Shop() {
         <div className="col-md-3 pt-2">
           <h4>Search/Filter</h4>
           <hr />
-          <Menu defaultOpenKeys={["1", "2", "3", "4"]} mode="inline">
+          <Menu
+            defaultOpenKeys={["1", "2", "3", "4", "5", "6", "7"]}
+            mode="inline"
+          >
             <SubMenu
               key="1"
               title={
@@ -234,7 +361,48 @@ export default function Shop() {
                 </span>
               }
             >
-              <div style={{ marginTop: "-10px" }} className="pl-4 pr-4">{showSubCategories()}</div>
+              <div style={{ marginTop: "-10px" }} className="pl-3 pr-5">
+                {showSubCategories()}
+              </div>
+            </SubMenu>
+
+            <SubMenu
+              key="5"
+              title={
+                <span className="h6">
+                  <DownSquareOutlined /> Brands
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }} className="pl-3 pr-5">
+                {showBrands()}
+              </div>
+            </SubMenu>
+
+            <SubMenu
+              key="6"
+              title={
+                <span className="h6">
+                  <DownSquareOutlined /> Colors
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }} className="pl-3 pr-5">
+                {showColors()}
+              </div>
+            </SubMenu>
+
+            <SubMenu
+              key="7"
+              title={
+                <span className="h6">
+                  <DownSquareOutlined /> Shipping
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }} className="pl-3 pr-5">
+                {showShipping()}
+              </div>
             </SubMenu>
           </Menu>
         </div>
