@@ -83,7 +83,7 @@ export default function Shop() {
 
   // 3. load products on price range
   useEffect(() => {
-    console.log("ok to request on price range");
+    // console.log("ok to request on price range");
     fetchProducts({ price });
   }, [ok]);
 
@@ -270,6 +270,7 @@ export default function Shop() {
         onChange={handleShippingchange}
         value="Yes"
         checked={shipping === "Yes"}
+
       >
         Yes
       </Checkbox>
@@ -279,6 +280,7 @@ export default function Shop() {
         onChange={handleShippingchange}
         value="No"
         checked={shipping === "No"}
+
       >
         No
       </Checkbox>

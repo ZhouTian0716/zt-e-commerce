@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu } from "antd";
+import { Menu, Badge } from "antd";
 import {
   AppstoreOutlined,
   SettingOutlined,
@@ -7,6 +7,7 @@ import {
   UserAddOutlined,
   LogoutOutlined,
   ShoppingOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Link, useHistory } from "react-router-dom";
 import firebase from "firebase";
@@ -26,7 +27,7 @@ const Header = () => {
 
   // Redux
   let dispatch = useDispatch();
-  let { user } = useSelector((state) => state);
+  let { user, cart } = useSelector((state) => state);
   let history = useHistory();
 
   const handleClick = (e) => {
@@ -50,17 +51,23 @@ const Header = () => {
       selectedKeys={[current]}
       mode="horizontal"
     >
-      <Item key="home" icon={<AppstoreOutlined />}>
+      <Item key={"home"} icon={<AppstoreOutlined />}>
         <Link to="/">Home</Link>
       </Item>
 
-      <Item key="shop" icon={<ShoppingOutlined />}>
+      <Item key={"shop"} icon={<ShoppingOutlined />}>
         <Link to="/shop">Shop</Link>
+      </Item>
+
+      <Item key={"cart"} icon={<ShoppingCartOutlined />}>
+        <Link to="/cart">
+          <Badge count={cart.length} offset={[9,0]}>Cart
+            </Badge></Link>
       </Item>
 
       {user && (
         <SubMenu
-          key="user"
+          key={"user"}
           className="float-right"
           icon={<SettingOutlined />}
           title={user.email.split("@")[0]}
@@ -76,25 +83,29 @@ const Header = () => {
             </Item>
           )}
 
-          <Item key="logout" icon={<LogoutOutlined />} onClick={logout}>
+          <Item key={"logout"} icon={<LogoutOutlined />} onClick={logout}>
             Logout
           </Item>
         </SubMenu>
       )}
 
       {!user && (
-        <Item key="login" icon={<UserOutlined />} className="float-right">
+        <Item key={"login"} icon={<UserOutlined />} className="float-right">
           <Link to="/login">Login</Link>
         </Item>
       )}
 
       {!user && (
-        <Item className="float-right" key="register" icon={<UserAddOutlined />}>
+        <Item
+          className="float-right"
+          key={"register"}
+          icon={<UserAddOutlined />}
+        >
           <Link to="/register">Register</Link>
         </Item>
       )}
       <span className="float-right p-1">
-      <Search />
+        <Search />
       </span>
     </Menu>
   );
