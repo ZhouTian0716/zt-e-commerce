@@ -10,7 +10,7 @@ import StarRating from "react-star-ratings";
 import RatingModal from "../modal/RatingModal";
 import { showAverage } from "../../clientRequest/rating";
 import _ from "lodash";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 
 const { TabPane } = Tabs;
 
@@ -46,16 +46,11 @@ export default function SingleProduct({ product, onStarClick, star }) {
       setTooltip("Added");
       // add to redux state
       dispatch({
-        type:"ADD_TO_CART",
-        payload:unique,
-      })
+        type: "ADD_TO_CART",
+        payload: unique,
+      });
     }
   };
-
-
-
-
-
 
   return (
     <>

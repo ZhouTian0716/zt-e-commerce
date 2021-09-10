@@ -10,6 +10,7 @@ import Product from "./pages/Product";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart";
 import Header from "./components/nav/Header";
+import SideDrawer from "./components/drawer/SideDrawer";
 import RegisterComplete from "./pages/auth/RegisterComplete";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import History from "./pages/user/History.js";
@@ -67,6 +68,7 @@ export default function App() {
   return (
     <>
       <Header />
+      <SideDrawer />
       <ToastContainer />
       <Switch>
         <Route exact path="/product/:slug" component={Product} />

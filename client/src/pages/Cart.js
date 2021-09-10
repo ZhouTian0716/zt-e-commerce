@@ -1,17 +1,42 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import ProductRowInCheckout from "../components/cards/ProductRowInCheckout";
 
 export default function Cart() {
   // redux state
   const { user, cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
 
-  const getTotal=()=>{
-      return cart.reduce((current, next)=>{
-        return current + next.count*next.price
-      },0)
-  }
+  const getTotal = () => {
+    return cart.reduce((current, next) => {
+      return current + next.count * next.price;
+    }, 0);
+  };
+
+  const saveOrderToDb = () => {
+    console.log("Saving order");
+  };
+
+  const showCartItems = () => (
+    <table className="table table-bordered">
+      <thead className="thead-light">
+        <tr>
+          <th scope="col">Image</th>
+          <th scope="col">Title</th>
+          <th scope="col">Price</th>
+          <th scope="col">Brand</th>
+          <th scope="col">Color</th>
+          <th scope="col">Count</th>
+          <th scope="col">Shipping</th>
+          <th scope="col">Remove</th>
+        </tr>
+      </thead>
+      {cart.map((p) => (
+        <ProductRowInCheckout key={p._id} p={p} />
+      ))}
+    </table>
+  )
 
   return (
     <div className="container-fluid pt-2">
@@ -19,12 +44,12 @@ export default function Cart() {
         <div className="col-md-8">
           <h4>Cart / {cart.length} Product</h4>
           {!cart.length ? (
-            <h4>
+            <p>
               No product added in cart yet.{" "}
               <Link to="/shop">Continue Shopping</Link>
-            </h4>
+            </p>
           ) : (
-            <h4>items herer</h4>
+            showCartItems()
           )}
         </div>
         <div className="col-md-4">
@@ -39,16 +64,30 @@ export default function Cart() {
             </div>
           ))}
           <hr />
-          <p>Total: <b>${getTotal()}</b></p>
+          <p>
+            Total: <b>${getTotal()}</b>
+          </p>
           <hr />
           {user ? (
-            <button className="btn btn-sm btn-primary mt-2">
+            <button
+              className="btn btn-sm btn-primary mt-2"
+              onClick={saveOrderToDb}
+              disabled={!cart.length}
+            >
               Proceed to Checkout
             </button>
           ) : (
-            <button className="btn btn-sm btn-primary mt-2">
-              Login to Checkout
-            </button>
+            <Link
+              to={{
+                pathname: "/login",
+                state: { from: "/cart" },
+              }}
+            >
+              <button className="btn btn-sm btn-primary mt-2">
+                {/* refer to LoginRedirect in Login.js */}
+                Login to Checkout
+              </button>
+            </Link>
           )}
         </div>
       </div>

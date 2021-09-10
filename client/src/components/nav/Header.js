@@ -67,7 +67,7 @@ const Header = () => {
 
       {user && (
         <SubMenu
-          key={"user"}
+          key="user"
           className="float-right"
           icon={<SettingOutlined />}
           title={user.email.split("@")[0]}
@@ -83,14 +83,14 @@ const Header = () => {
             </Item>
           )}
 
-          <Item key={"logout"} icon={<LogoutOutlined />} onClick={logout}>
+          <Item key="logout" icon={<LogoutOutlined />} onClick={logout}>
             Logout
           </Item>
         </SubMenu>
       )}
 
       {!user && (
-        <Item key={"login"} icon={<UserOutlined />} className="float-right">
+        <Item key="login" icon={<UserOutlined />} className="float-right">
           <Link to="/login">Login</Link>
         </Item>
       )}
@@ -98,7 +98,7 @@ const Header = () => {
       {!user && (
         <Item
           className="float-right"
-          key={"register"}
+          key="register"
           icon={<UserAddOutlined />}
         >
           <Link to="/register">Register</Link>
