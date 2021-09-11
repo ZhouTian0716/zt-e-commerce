@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Product from "./pages/Product";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import Header from "./components/nav/Header";
 import SideDrawer from "./components/drawer/SideDrawer";
 import RegisterComplete from "./pages/auth/RegisterComplete";
@@ -75,6 +76,7 @@ export default function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/shop" component={Shop} />
         <Route exact path="/cart" component={Cart} />
+        <Route exact path="/checkout" component={Checkout} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/register/complete" component={RegisterComplete} />

@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { userCart } from "../clientRequest/user";
 import ProductRowInCheckout from "../components/cards/ProductRowInCheckout";
 
-export default function Cart() {
-  // redux state
+export default function Cart({ history }) {
   const { user, cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
 
@@ -15,7 +15,13 @@ export default function Cart() {
   };
 
   const saveOrderToDb = () => {
-    console.log("Saving order");
+    // console.log("cart", JSON.stringify(cart, null, 2));
+    userCart(cart, user.token)
+      .then((res) => {
+        console.log("CART POST RES", res);
+        if (res.data.ok) history.push("/checkout");
+      })
+      .catch((err) => console.log("cart save err", err));
   };
 
   const showCartItems = () => (
@@ -36,13 +42,17 @@ export default function Cart() {
         <ProductRowInCheckout key={p._id} p={p} />
       ))}
     </table>
-  )
+  );
+
+  const productText = cart.length > 1 ? "Products" : "Product";
 
   return (
     <div className="container-fluid pt-2">
       <div className="row">
         <div className="col-md-8">
-          <h4>Cart / {cart.length} Product</h4>
+          <h4>
+            Cart / {cart.length} {productText}
+          </h4>
           {!cart.length ? (
             <p>
               No product added in cart yet.{" "}
