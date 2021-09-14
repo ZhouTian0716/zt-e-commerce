@@ -10,13 +10,13 @@ import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-export default function Checkout() {
+export default function Checkout({history}) {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [coupon, setCoupon] = useState("");
   const [address, setAddress] = useState("");
   const [addressSaved, setAddressSaved] = useState(false);
-  const [totalAfterDiscount, setTotalAfterDiscount] = useState("");
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountErr, setDiscountErr] = useState("");
 
   const dispatch = useDispatch();
@@ -44,6 +44,9 @@ export default function Checkout() {
     clearUserCart(user.token).then((res) => {
       setProducts([]);
       setTotal(0);
+      // somepage updates
+      setTotalAfterDiscount(0);
+      setCoupon("");
       toast.success("Cart is empty. Continue shopping.");
     });
   };
@@ -64,11 +67,19 @@ export default function Checkout() {
       console.log("RES ON COUPON APPLIED", res.data);
       if (res.data) {
         setTotalAfterDiscount(res.data);
-        // push to redux
+        // Push to redux
+        dispatch({
+          type: "COUPON_APPLIED",
+          payload: true, 
+        });
       }
       if (res.data.err) {
         setDiscountErr(res.data.err);
-        // push to redux
+        // Push to redux
+        dispatch({
+          type: "COUPON_APPLIED",
+          payload: false, 
+        });
       }
     });
   };
@@ -95,7 +106,10 @@ export default function Checkout() {
   const showApplyCoupon = () => (
     <>
       <input
-        onChange={(e) => setCoupon(e.target.value)}
+        onChange={(e) => {
+          setCoupon(e.target.value);
+          setDiscountErr("");
+        }}
         value={coupon}
         type="text"
         className="form-control"
@@ -122,16 +136,21 @@ export default function Checkout() {
       <div className="col-md-6">
         <h4>Order Summary</h4>
         <hr />
-        <p>Products {products.length}</p>
-        <hr />
         {showProductSummary()}
         <hr />
-        <p>Cart Total: {total}</p>
+        <p>Total: ${total}</p>
+
+        {totalAfterDiscount > 0 && (
+          <p className="bg-success p-2">
+            Discount Applied: Total Payable: ${totalAfterDiscount}
+          </p>
+        )}
         <div className="row">
           <div className="col-md-6">
             <button
               className="btn btn-primary"
               disabled={!addressSaved || !products.length}
+              onClick={()=>history.push('/payment')}
             >
               Place Order
             </button>
