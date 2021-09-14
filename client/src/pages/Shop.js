@@ -77,6 +77,9 @@ export default function Shop() {
   useEffect(() => {
     const delayed = setTimeout(() => {
       fetchProducts({ query: text });
+      if(!text){
+        loadProducts();
+      }
     }, 600);
     return () => clearTimeout(delayed);
   }, [text]);

@@ -41,7 +41,7 @@ export default function CategoryUpdate({ history, match }) {
         <div className="col-md-2">
           <AdminNav />
         </div>
-        <div className="col">
+        <div className="col-md-10">
           <h4>Edit category</h4>
 
           <CategoryForm

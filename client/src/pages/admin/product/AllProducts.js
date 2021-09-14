@@ -46,7 +46,7 @@ export default function AllProducts() {
           <AdminNav />
         </div>
 
-        <div className="col">
+        <div className="col-md-10">
           {loading ? (
             <h4 className="text-danger">Loading...</h4>
           ) : (

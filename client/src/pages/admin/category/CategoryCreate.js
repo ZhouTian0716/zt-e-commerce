@@ -68,7 +68,7 @@ export default function CategoryCreate() {
         <div className="col-md-2">
           <AdminNav />
         </div>
-        <div className="col">
+        <div className="col-md-10">
           <h4>Create category</h4>
 
           <CategoryForm
