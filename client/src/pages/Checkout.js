@@ -11,6 +11,10 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 export default function Checkout({history}) {
+  
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => ({ ...state }));
+  
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [coupon, setCoupon] = useState("");
@@ -19,10 +23,10 @@ export default function Checkout({history}) {
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountErr, setDiscountErr] = useState("");
 
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => ({ ...state }));
+  
 
   useEffect(() => {
+    
     getUserCart(user.token).then((res) => {
       // console.log('user cart res', JSON.stringify(res.data, null, 2));
       setProducts(res.data.products);
@@ -39,6 +43,10 @@ export default function Checkout({history}) {
     dispatch({
       type: "ADD_TO_CART",
       payload: [],
+    });
+    dispatch({
+      type: "COUPON_APPLIED",
+      payload: false,
     });
     // clear backend
     clearUserCart(user.token).then((res) => {

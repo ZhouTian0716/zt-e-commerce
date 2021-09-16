@@ -13,6 +13,7 @@ import { Link, useHistory } from "react-router-dom";
 import firebase from "firebase";
 import { useDispatch, useSelector } from "react-redux";
 import Search from "../forms/Search";
+import { FormItemContext } from "antd/lib/form/context";
 
 const { SubMenu, Item } = Menu;
 
@@ -51,23 +52,36 @@ const Header = () => {
       selectedKeys={[current]}
       mode="horizontal"
     >
-      <Item key={"home"} icon={<AppstoreOutlined />}>
+      <Item key="home" icon={<AppstoreOutlined />}>
         <Link to="/">Home</Link>
       </Item>
 
-      <Item key={"shop"} icon={<ShoppingOutlined />}>
+      <Item key="shop" icon={<ShoppingOutlined />}>
         <Link to="/shop">Shop</Link>
       </Item>
 
-      <Item key={"cart"} icon={<ShoppingCartOutlined />}>
+      <Item key="cart" icon={<ShoppingCartOutlined />}>
         <Link to="/cart">
-          <Badge count={cart.length} offset={[9,0]}>Cart
-            </Badge></Link>
+          <Badge count={cart.length} offset={[9, 0]}>
+            Cart
+          </Badge>
+        </Link>
       </Item>
+
+      {!user && (
+        <Item key="register" icon={<UserAddOutlined />} className="float-right">
+          <Link to="/register">Register</Link>
+        </Item>
+      )}
+
+      {!user && (
+        <Item key="login" icon={<UserOutlined />} className="float-right">
+          <Link to="/login">Login</Link>
+        </Item>
+      )}
 
       {user && (
         <SubMenu
-          key="user"
           className="float-right"
           icon={<SettingOutlined />}
           title={user.email.split("@")[0]}
@@ -83,27 +97,12 @@ const Header = () => {
             </Item>
           )}
 
-          <Item key="logout" icon={<LogoutOutlined />} onClick={logout}>
+          <Item icon={<LogoutOutlined />} onClick={logout}>
             Logout
           </Item>
         </SubMenu>
       )}
 
-      {!user && (
-        <Item key="login" icon={<UserOutlined />} className="float-right">
-          <Link to="/login">Login</Link>
-        </Item>
-      )}
-
-      {!user && (
-        <Item
-          className="float-right"
-          key="register"
-          icon={<UserAddOutlined />}
-        >
-          <Link to="/register">Register</Link>
-        </Item>
-      )}
       <span className="float-right p-1">
         <Search />
       </span>

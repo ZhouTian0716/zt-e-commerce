@@ -77,7 +77,7 @@ export default function Shop() {
   useEffect(() => {
     const delayed = setTimeout(() => {
       fetchProducts({ query: text });
-      if(!text){
+      if (!text) {
         loadProducts();
       }
     }, 600);
@@ -211,6 +211,7 @@ export default function Shop() {
     brands.map((b) => (
       <Radio
         className="pb-1 pl-1 pr-4"
+        key={brands.indexOf(b)}
         value={b}
         name={b}
         checked={b === brand}
@@ -239,6 +240,7 @@ export default function Shop() {
   const showColors = () =>
     colors.map((c) => (
       <Radio
+        key={colors.indexOf(c)}
         className="pb-1 pl-1 pr-4"
         value={c}
         name={c}
@@ -259,7 +261,7 @@ export default function Shop() {
     setCategoryIds([]);
     setStar("");
     setBrand("");
-    setShipping('');
+    setShipping("");
     setColor(e.target.value);
     setShipping("");
     fetchProducts({ color: e.target.value });
@@ -273,7 +275,6 @@ export default function Shop() {
         onChange={handleShippingchange}
         value="Yes"
         checked={shipping === "Yes"}
-
       >
         Yes
       </Checkbox>
@@ -283,7 +284,6 @@ export default function Shop() {
         onChange={handleShippingchange}
         value="No"
         checked={shipping === "No"}
-
       >
         No
       </Checkbox>
