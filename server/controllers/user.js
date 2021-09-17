@@ -102,7 +102,7 @@ exports.recieveCoupon = async (req, res) => {
   res.json(totalAfterDiscount);
 };
 
-// Order Create
+// CREATE ORDER
 exports.createOrder = async (req, res) => {
   const { paymentIntent } = req.body.stripeResponse;
   const user = await User.findOne({ email: req.user.email }).exec();
@@ -125,8 +125,17 @@ exports.createOrder = async (req, res) => {
     };
   });
 
-  let updated = await Product.bulkWrite(bulkOption, {new:true});
-  console.log("PRODUCT QUANTITY-- AND SOLD++",updated);
+  let updated = await Product.bulkWrite(bulkOption, { new: true });
+  console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
   console.log("NEW ORDER SAVED", newOrder);
   res.json({ ok: true });
+};
+
+// FIND USER ORDERS
+exports.findUserOrders = async (req, res) => {
+  const user = await User.findOne({ email: req.user.email }).exec();
+  let userOrders = await Order.find({ orderBy: user._id }).populate(
+    "products.product"
+  ).exec();
+  res.json(userOrders);
 };
