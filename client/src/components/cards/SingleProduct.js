@@ -25,6 +25,8 @@ export default function SingleProduct({ product, onStarClick, star }) {
 
   // functions
   const handleAddToCart = () => {
+    // Disable controll
+    if (product.quantity < 1) return;
     // create cart array
     let cart = [];
     if (typeof window !== "undefined") {
@@ -50,8 +52,8 @@ export default function SingleProduct({ product, onStarClick, star }) {
         payload: unique,
       });
       dispatch({
-        type:"SET_VISIBLE",
-        payload:true,
+        type: "SET_VISIBLE",
+        payload: true,
       });
     }
   };
@@ -92,9 +94,9 @@ export default function SingleProduct({ product, onStarClick, star }) {
         <Card
           actions={[
             <Tooltip title={tooltip}>
-              <a onClick={handleAddToCart}>
-                <ShoppingCartOutlined className="text-danger" /> <br /> Add to
-                Cart
+              <a disabled={product.quantity < 1} onClick={handleAddToCart}>
+                <ShoppingCartOutlined className="text-danger" /> <br />
+                {product.quantity < 1 ? "Out of stock" : "Add to Cart"}
               </a>
             </Tooltip>,
 

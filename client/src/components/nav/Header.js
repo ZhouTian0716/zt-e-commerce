@@ -53,7 +53,7 @@ const Header = () => {
       mode="horizontal"
     >
       <Item key="home" icon={<AppstoreOutlined />}>
-        <Link to="/">Home</Link>
+        <Link to="/"  >Home</Link>
       </Item>
 
       <Item key="shop" icon={<ShoppingOutlined />}>
