@@ -1,15 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AdminNav from "../../components/nav/AdminNav";
-
+import Orders from "../../components/order/Orders";
+import { getAllOrders, changeStatus } from "../../clientRequest/admin";
+import { useSelector, useDispatch } from "react-redux";
+// import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
+  const dispatch = useDispatch();
+  const [orders, setOrders] = useState([]);
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
+  const loadOrders = () =>
+    getAllOrders(user.token).then((res) => {
+      setOrders(res.data);
+    });
+
+  const handleStatusChange = (orderId, orderStatus) => {
+    changeStatus(orderId, orderStatus, user.token).then((res) => {
+      // toast.success("Status updated");
+      loadOrders();
+    });
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-md-2">
           <AdminNav />
         </div>
-        <div className="col-md-10">admin dashbaord page</div>
+        <div className="col-md-10">
+          <h4>Admin Dashboard</h4>
+          <Orders orders={orders} handleStatusChange={handleStatusChange} />
+        </div>
       </div>
     </div>
   );

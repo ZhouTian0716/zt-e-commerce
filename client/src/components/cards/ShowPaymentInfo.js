@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ShowPaymentInfo({ order }) {
+export default function ShowPaymentInfo({ order, showStatus = true }) {
   return (
     <div>
       <p>
@@ -21,7 +21,12 @@ export default function ShowPaymentInfo({ order }) {
           Ordered on:
           {new Date(order.paymentIntent.created * 1000).toLocaleString()}
         </span>{" "}
-        <span className="badge bg-primary text-white">STATUS: {order.orderStatus}</span>{" "}
+        <br />
+        {showStatus && (
+          <span className="badge bg-primary text-white">
+            STATUS: {order.orderStatus}
+          </span>
+        )}
       </p>
     </div>
   );
