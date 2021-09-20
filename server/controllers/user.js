@@ -134,8 +134,37 @@ exports.createOrder = async (req, res) => {
 // FIND USER ORDERS
 exports.findUserOrders = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
-  let userOrders = await Order.find({ orderBy: user._id }).populate(
-    "products.product"
-  ).exec();
+  let userOrders = await Order.find({ orderBy: user._id })
+    .populate("products.product")
+    .exec();
   res.json(userOrders);
+};
+
+// WISHLIST
+exports.addToWishlist = async (req, res) => {
+  const { productId } = req.body;
+  // $addToSet help us to get rid of duplicates
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $addToSet: { wishlist: productId } },
+    { new: true }
+  ).exec();
+  res.json({ ok: true });
+};
+
+exports.wishlist = async (req, res) => {
+  const list = await User.findOne({ email: req.user.email })
+    .select("wishlist")
+    .populate("wishlist")
+    .exec();
+  res.json(list);
+};
+
+exports.removeFromWishlist = async (req, res) => {
+  const { productId } = req.params;
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $pull: { wishlist: productId } }
+  ).exec();
+  res.json({ ok: true });
 };

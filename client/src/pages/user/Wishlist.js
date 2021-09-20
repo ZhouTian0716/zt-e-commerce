@@ -1,13 +1,48 @@
-import React from 'react'
-import UserNav from '../../components/nav/UserNav'
+import React, { useState, useEffect } from "react";
+import UserNav from "../../components/nav/UserNav";
+import { getUserWishlist, removeFromWishlist } from "../../clientRequest/user";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { DeleteOutlined } from "@ant-design/icons";
 
 export default function Wishlist() {
-    return (
-        <div className="container-fluid">
-            <div className="row">
-                <div className="col-md-2"><UserNav /></div>
-                <div className="col">user wishlist update page</div>
-            </div>
+  const [wishlist, setWishlist] = useState([]);
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    loadWishlist();
+  }, []);
+
+  const loadWishlist = () =>
+    getUserWishlist(user.token).then((res) => setWishlist(res.data.wishlist));
+
+  const handleRemove = (productId) =>
+    removeFromWishlist(productId, user.token).then((res) => loadWishlist());
+
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-md-2">
+          <UserNav />
         </div>
-    )
+        <div className="col">
+          <h4>Wishlist</h4>
+          {wishlist.map((p) => (
+            <div
+              key={p._id}
+              className="alert alert-secondary d-flex align-items-center  justify-content-between"
+            >
+              <Link to={`/product/${p.slug}`}>{p.title}</Link>
+              <span
+                onClick={() => handleRemove(p._id)}
+                className="btn btn-sm float-right btn-danger"
+              >
+                <DeleteOutlined />
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
