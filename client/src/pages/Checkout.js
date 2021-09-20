@@ -5,16 +5,17 @@ import {
   clearUserCart,
   saveUserAddress,
   applyCoupon,
+  addUserCashOrder,
 } from "../clientRequest/user";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-export default function Checkout({history}) {
-  
+export default function Checkout({ history }) {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => ({ ...state }));
-  
+  const { user, COD } = useSelector((state) => ({ ...state }));
+  const couponBoolean = useSelector((state) => state.coupon);
+
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [coupon, setCoupon] = useState("");
@@ -23,10 +24,7 @@ export default function Checkout({history}) {
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountErr, setDiscountErr] = useState("");
 
-  
-
   useEffect(() => {
-    
     getUserCart(user.token).then((res) => {
       // console.log('user cart res', JSON.stringify(res.data, null, 2));
       setProducts(res.data.products);
@@ -78,7 +76,7 @@ export default function Checkout({history}) {
         // Push to redux
         dispatch({
           type: "COUPON_APPLIED",
-          payload: true, 
+          payload: true,
         });
       }
       if (res.data.err) {
@@ -86,7 +84,7 @@ export default function Checkout({history}) {
         // Push to redux
         dispatch({
           type: "COUPON_APPLIED",
-          payload: false, 
+          payload: false,
         });
       }
     });
@@ -128,6 +126,37 @@ export default function Checkout({history}) {
     </>
   );
 
+  const createCashOrder = () => {
+    addUserCashOrder(user.token, COD, couponBoolean).then((res) => {
+      console.log("USER CASH ORDER CREATED RES", res);
+      if (res.data.ok) {
+        // clear local storage
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("cart");
+        }
+        // clear redux
+        dispatch({
+          type: "ADD_TO_CART",
+          payload: [],
+        });
+        dispatch({
+          type: "COUPON_APPLIED",
+          payload: false,
+        });
+        dispatch({
+          type: "SET_COD",
+          payload: false,
+        });
+        // clear backend
+        clearUserCart(user.token);
+        // redirect
+        setTimeout(()=> {
+          history.push("/user/history")
+        },1000)
+      }
+    });
+  };
+
   return (
     <div className="row">
       <div className="col-md-6">
@@ -155,13 +184,23 @@ export default function Checkout({history}) {
         )}
         <div className="row">
           <div className="col-md-6">
-            <button
-              className="btn btn-primary"
-              disabled={!addressSaved || !products.length}
-              onClick={()=>history.push('/payment')}
-            >
-              Place Order
-            </button>
+            {COD ? (
+              <button
+                className="btn btn-primary"
+                disabled={!addressSaved || !products.length}
+                onClick={createCashOrder}
+              >
+                Place Order
+              </button>
+            ) : (
+              <button
+                className="btn btn-primary"
+                disabled={!addressSaved || !products.length}
+                onClick={() => history.push("/payment")}
+              >
+                Place Order
+              </button>
+            )}
           </div>
           <div className="col-md-6">
             <button

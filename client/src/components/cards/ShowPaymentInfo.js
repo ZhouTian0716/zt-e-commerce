@@ -19,7 +19,7 @@ export default function ShowPaymentInfo({ order, showStatus = true }) {
         <span>Payment:{order.paymentIntent.status.toUpperCase()}</span>{" "}
         <span>
           Ordered on:
-          {new Date(order.paymentIntent.created * 1000).toLocaleString()}
+          {new Date(order.paymentIntent.created*1000).toLocaleString()}
         </span>{" "}
         <br />
         {showStatus && (

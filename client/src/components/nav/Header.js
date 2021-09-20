@@ -37,6 +37,24 @@ const Header = () => {
 
   const logout = () => {
     firebase.auth().signOut();
+    // @@@@@@@@@@@@@@@ LOGOUT RELATES @@@@@@@@@@@@@@@
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("cart");
+    }
+    // clear redux
+    dispatch({
+      type: "ADD_TO_CART",
+      payload: [],
+    });
+    dispatch({
+      type: "COUPON_APPLIED",
+      payload: false,
+    });
+    dispatch({
+      type: "SET_COD",
+      payload: false,
+    });
+    // @@@@@@@@@@@@@@@ LOGOUT RELATES @@@@@@@@@@@@@@@
     // dispatch to Redux store
     dispatch({
       type: "LOGOUT",

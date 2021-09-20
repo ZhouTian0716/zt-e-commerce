@@ -17,6 +17,7 @@ const {
   addToWishlist,
   wishlist,
   removeFromWishlist,
+  createCashOrder,
 } = require("../controllers/user.js");
 
 // routes
@@ -28,6 +29,7 @@ router.post("/user/address", authCheck, saveAddress);
 
 // Purchase Orders
 router.post("/user/order", authCheck, createOrder);
+router.post("/user/cash-order", authCheck, createCashOrder);
 router.get("/user/order", authCheck, findUserOrders);
 
 // coupon

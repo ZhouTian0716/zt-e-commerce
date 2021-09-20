@@ -3,6 +3,7 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 const Coupon = require("../models/coupon");
 const Order = require("../models/order");
+const uniqueid = require("uniqueid");
 
 exports.list = async (req, res) => {
   try {
@@ -130,6 +131,58 @@ exports.createOrder = async (req, res) => {
   console.log("NEW ORDER SAVED", newOrder);
   res.json({ ok: true });
 };
+
+//*************************************************************************************
+// CREATE CASH ORDER
+exports.createCashOrder = async (req, res) => {
+  // console.log(req.body);
+  const { COD, couponApplied } = req.body;
+  if(!COD) return res.status(400).send('Create cash order failed')
+  const user = await User.findOne({ email: req.user.email }).exec();
+  let userCart = await Cart.findOne({ orderBy: user._id }).exec();
+  // console.log(userCart);
+  // return;
+
+  //##########################################
+  let finalAmount = 0;
+  if (couponApplied && userCart.totalAfterDiscount) {
+    finalAmount = Math.round(userCart.totalAfterDiscount * 100);
+  } else {
+    finalAmount = Math.round(userCart.cartTotal * 100);
+  }
+  //##########################################
+  // New Order
+  let newOrder = await new Order({
+    products: userCart.products,
+    paymentIntent: {
+      id: uniqueid(),
+      amount: finalAmount,
+      currency: "AUD",
+      status: "Cash on Delivery",
+      created: Date.now()*0.001,
+      payment_method_types: ["cash"],
+    },
+    orderBy: user._id,
+    orderStatus: "Cash on Delivery",
+  }).save();
+  console.log(newOrder);
+
+  // New Order results in these actions
+  let bulkOption = userCart.products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item.product._id },
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+
+  let updated = await Product.bulkWrite(bulkOption, { new: true });
+  console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
+  console.log("NEW ORDER SAVED", newOrder);
+  res.json({ ok: true });
+};
+//*************************************************************************************
 
 // FIND USER ORDERS
 exports.findUserOrders = async (req, res) => {

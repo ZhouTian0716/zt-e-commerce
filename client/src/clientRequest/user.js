@@ -39,7 +39,6 @@ export const saveUserAddress = async (authtoken, address) => {
   );
 };
 
-
 // Use Coupon
 export const applyCoupon = async (authtoken, coupon) => {
   return await axios.post(
@@ -66,6 +65,19 @@ export const addOrder = async (stripeResponse, authtoken) => {
   );
 };
 
+// CASH ORDER
+export const addUserCashOrder = async (authtoken, COD, coupon) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API}/user/cash-order`,
+    { COD, couponApplied: coupon },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+};
+
 export const getUserOrders = async (authtoken) => {
   return await axios.get(`${process.env.REACT_APP_API}/user/order`, {
     headers: {
@@ -73,7 +85,6 @@ export const getUserOrders = async (authtoken) => {
     },
   });
 };
-
 
 // WISHLIST addToWishlist
 export const addToWishlist = async (productId, authtoken) => {

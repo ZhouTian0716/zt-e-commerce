@@ -15,10 +15,22 @@ export default function Cart({ history }) {
   };
 
   const saveOrderToDb = () => {
-    // console.log("cart", JSON.stringify(cart, null, 2));
     userCart(cart, user.token)
       .then((res) => {
-        console.log("CART POST RES", res);
+        // console.log("CART POST RES", res);
+        if (res.data.ok) history.push("/checkout");
+      })
+      .catch((err) => console.log("cart save err", err));
+  };
+
+  const saveCashOrderToDb = () => {
+    userCart(cart, user.token)
+      .then((res) => {
+        // console.log("CART POST RES", res);
+        dispatch({
+          type:"SET_COD",
+          payload:true
+        });
         if (res.data.ok) history.push("/checkout");
       })
       .catch((err) => console.log("cart save err", err));
@@ -79,13 +91,23 @@ export default function Cart({ history }) {
           </p>
           <hr />
           {user ? (
-            <button
-              className="btn btn-sm btn-primary mt-2"
-              onClick={saveOrderToDb}
-              disabled={!cart.length}
-            >
-              Proceed to Checkout
-            </button>
+            <>
+              <button
+                className="btn btn-sm btn-primary mt-2"
+                onClick={saveOrderToDb}
+                disabled={!cart.length}
+              >
+                Proceed to Checkout
+              </button>
+              <br />
+              <button
+                className="btn btn-sm btn-warning mt-2"
+                onClick={saveCashOrderToDb}
+                disabled={!cart.length}
+              >
+                Pay Cash on Delivery
+              </button>
+            </>
           ) : (
             <Link
               to={{

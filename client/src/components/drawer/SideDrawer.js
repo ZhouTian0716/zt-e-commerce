@@ -7,7 +7,7 @@ import defaultImg from "../../images/default.jpg";
 export default function SideDrawer() {
   let dispatch = useDispatch();
   const { drawer, cart } = useSelector((state) => ({ ...state }));
-  const productText = cart.length > 1 ? "Products" : "Product";
+  const productText = cart.length > 0 ? "Products" : "Product";
 
   const imageStyle = {
     width: "100%",
